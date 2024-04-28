@@ -15,6 +15,9 @@ public class Employee {
     @Column(name = "id")
     private Long id;
 
+    @Column(name = "name")
+    private Long name;
+
     @Column(name = "age")
     private Integer age;
 

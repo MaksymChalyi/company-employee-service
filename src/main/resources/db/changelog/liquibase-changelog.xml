@@ -19,7 +19,9 @@
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-
+            <column name="name" type="VARCHAR(128)">
+                <constraints nullable="false"/>
+            </column>
             <column name="age" type="INTEGER">
                 <constraints nullable="true"/>
             </column>
