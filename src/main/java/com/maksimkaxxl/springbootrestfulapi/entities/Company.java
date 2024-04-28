@@ -14,9 +14,9 @@ public class Company {
     private Long id;
 
     @Column(name = "name")
-    String name;
+    private String name;
 
     @Column(name = "industry")
-    String industry;
+    private String industry;
 
 }

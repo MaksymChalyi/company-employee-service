@@ -16,21 +16,20 @@ public class Employee {
     private Long id;
 
     @Column(name = "age")
-    Integer age;
+    private Integer age;
 
     @Column(name = "position")
-    String position;
+    private String position;
 
     @Column(name = "experienceYears")
-    Integer experienceYears;
+    private Integer experienceYears;
 
-    @Column(name = "interests")
-    String interests;
+    @ElementCollection
+    private List<String> interests;
 
     @ManyToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "company_id")
     private Company company;
-
 
 
 }
