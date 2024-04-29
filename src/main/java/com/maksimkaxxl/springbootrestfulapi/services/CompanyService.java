@@ -10,4 +10,6 @@ public interface CompanyService {
     Company createCompany(CompanyDto companyDto);
 
     List<Company> getAllCompanies();
+
+    void deleteCompanyById(Long id);
 }
