@@ -12,4 +12,6 @@ public interface CompanyService {
     List<Company> getAllCompanies();
 
     void deleteCompanyById(Long id);
+
+    Company updateCompany(Long id, CompanyDto companyDto);
 }

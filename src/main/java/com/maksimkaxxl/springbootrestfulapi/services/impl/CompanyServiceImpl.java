@@ -46,4 +46,20 @@ public class CompanyServiceImpl implements CompanyService {
 
 
     }
+
+    @Override
+    public Company updateCompany(Long id, CompanyDto companyDto) {
+
+        Company existingCompany = companyRepository.findById(id)
+                .orElseThrow(() -> new CompanyNotFoundException("Company with ID " + id + " not found"));
+
+        Optional<Company> companyWithSameName = companyRepository.findByName(companyDto.name());
+        if (companyWithSameName.isPresent() && !companyWithSameName.get().getId().equals(id)) {
+            throw new DuplicateCompanyNameException("Company with name " + companyDto.name() + " already exists");
+        }
+        existingCompany.setName(companyDto.name());
+        existingCompany.setIndustry(companyDto.industry());
+
+        return companyRepository.save(existingCompany);
+    }
 }
