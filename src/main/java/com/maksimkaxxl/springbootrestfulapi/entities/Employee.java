@@ -16,7 +16,7 @@ public class Employee {
     private Long id;
 
     @Column(name = "name")
-    private Long name;
+    private String name;
 
     @Column(name = "age")
     private Integer age;
@@ -29,6 +29,7 @@ public class Employee {
 
     @ElementCollection
     private List<String> interests;
+
 
     @ManyToOne
     @JoinColumn(name = "company_id")

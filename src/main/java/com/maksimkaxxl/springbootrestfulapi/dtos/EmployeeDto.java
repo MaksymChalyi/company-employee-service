@@ -1,34 +1,31 @@
 package com.maksimkaxxl.springbootrestfulapi.dtos;
 
 import com.maksimkaxxl.springbootrestfulapi.annotations.AgeConstraint;
-import com.maksimkaxxl.springbootrestfulapi.entities.Company;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import lombok.Data;
 
 import java.util.List;
 
-@Data
-public class EmployeeDto {
+public record EmployeeDto(
 
-    @NotBlank(message = "Name is required")
-    private String name;
+        @NotBlank(message = "Name is required")
+        String name,
 
-    @NotNull(message = "Age is required")
-    @Positive(message = "Age must be a positive number")
-    @AgeConstraint
-    private Integer age;
+        @NotNull(message = "Age is required")
+        @AgeConstraint
+        Integer age,
 
-    @NotBlank(message = "Position is required")
-    private String position;
+        @NotBlank(message = "Position is required")
+        String position,
 
-    @NotNull(message = "Experience years are required")
-    @Positive(message = "Experience years must be a positive number")
-    private Integer experienceYears;
+        @NotNull(message = "Experience years are required")
+        @Positive(message = "Experience years must be a positive number")
+        Integer experienceYears,
 
-    private List<String> interests;
+        List<String> interests,
 
-    @NotNull(message = "Company is required")
-    private Company company;
+        @NotNull(message = "Company is required")
+        String companyName) {
 }

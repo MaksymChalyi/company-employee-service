@@ -43,14 +43,15 @@
             <column name="employee_id" type="BIGINT">
                 <constraints foreignKeyName="fk_employee_interests_employee_id" referencedTableName="employees"/>
             </column>
-            <column name="interest" type="VARCHAR(255)"/>
+            <column name="interests" type="VARCHAR(255)"/>
         </createTable>
 
-        <addForeignKeyConstraint baseTableName="employees" baseColumnNames="company_id"
-                                 constraintName="fk_employees_company_id"
-                                 referencedTableName="companies" referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="employee_interests" baseColumnNames="employee_id"
+                                 constraintName="fk_employee_interests_employee_id"
+                                 referencedTableName="employees" referencedColumnNames="id"/>
 
     </changeSet>
+
 
     <changeSet id="add_unique_index_to_company_name" author="maksimkaxxl">
         <createIndex indexName="idx_unique_company_name" tableName="companies" unique="true">
