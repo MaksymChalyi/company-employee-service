@@ -1,6 +1,8 @@
 package com.maksimkaxxl.springbootrestfulapi.controllers;
 
+import com.maksimkaxxl.springbootrestfulapi.dtos.CompanyDto;
 import com.maksimkaxxl.springbootrestfulapi.dtos.EmployeeDto;
+import com.maksimkaxxl.springbootrestfulapi.entities.Employee;
 import com.maksimkaxxl.springbootrestfulapi.services.EmployeeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +28,13 @@ public class EmployeeController {
     public ResponseEntity<?> findEmployeeById(@PathVariable Long id) {
         var employee = employeeService.findById(id);
         return new ResponseEntity<>(employee, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateEmployee(@PathVariable Long id, @Valid @RequestBody EmployeeDto employeeDto) {
+
+        var updatedEmployee = employeeService.updateEmployee(id, employeeDto);
+        return ResponseEntity.ok().body(updatedEmployee);
     }
 
 }
