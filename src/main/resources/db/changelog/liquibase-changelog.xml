@@ -58,6 +58,9 @@
         </createIndex>
     </changeSet>
 
+    <changeSet id="add_companies_to_db" author="maksimkaxxl">
+        <loadData tableName="companies" file="db/data/companies.csv"/>
+    </changeSet>
 
 
 </databaseChangeLog>
