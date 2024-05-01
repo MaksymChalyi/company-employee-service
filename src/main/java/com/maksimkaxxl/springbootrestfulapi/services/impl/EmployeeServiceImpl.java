@@ -40,6 +40,12 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeRepository.save(existingEmployee);
     }
 
+    @Override
+    public void deleteEmployee(Long id) {
+        Employee existingEmployee = getExistingEmployee(id);
+        employeeRepository.delete(existingEmployee);
+    }
+
     private Company getExistingCompany(String companyName) {
         return companyRepository.findByName(companyName)
                 .orElseThrow(() -> new CompanyNotFoundException("Company with name " + companyName + " not found"));
