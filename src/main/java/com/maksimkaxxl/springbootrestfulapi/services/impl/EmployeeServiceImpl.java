@@ -33,4 +33,12 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setCompany(existingCompany);
         return employeeRepository.save(employee);
     }
+
+    @Override
+    public Employee findById(Long id) {
+        return employeeRepository.findById(id)
+                .orElseThrow(() -> new CompanyNotFoundException("Employee not found with id: " + id));
+    }
+
+
 }

@@ -6,10 +6,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,9 +17,15 @@ public class EmployeeController {
     private final EmployeeService employeeService;
 
     @PostMapping
-    public ResponseEntity<?> createCompany(@Valid @RequestBody EmployeeDto employeeDto) {
+    public ResponseEntity<?> createEmployee(@Valid @RequestBody EmployeeDto employeeDto) {
         var createdEmployee = employeeService.createEmployee(employeeDto);
         return new ResponseEntity<>(createdEmployee, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> findEmployeeById(@PathVariable Long id) {
+        var employee = employeeService.findById(id);
+        return new ResponseEntity<>(employee, HttpStatus.CREATED);
     }
 
 }
