@@ -2,6 +2,7 @@ package com.maksimkaxxl.springbootrestfulapi.controllers;
 
 import com.maksimkaxxl.springbootrestfulapi.dtos.CompanyDto;
 import com.maksimkaxxl.springbootrestfulapi.dtos.EmployeeDto;
+import com.maksimkaxxl.springbootrestfulapi.dtos.responce.UploadedEmployeeResponse;
 import com.maksimkaxxl.springbootrestfulapi.entities.Employee;
 import com.maksimkaxxl.springbootrestfulapi.services.EmployeeService;
 import jakarta.validation.Valid;
@@ -9,6 +10,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
@@ -43,5 +47,13 @@ public class EmployeeController {
         return ResponseEntity.noContent().build();
 
     }
+
+    @PostMapping("/upload")
+    public ResponseEntity<UploadedEmployeeResponse> uploadEmployees(@RequestParam("file") MultipartFile file) {
+        UploadedEmployeeResponse statisticsOfUploads = employeeService.uploadEmployeesFromFile(file);
+        return new ResponseEntity<>(statisticsOfUploads, HttpStatus.CREATED);
+
+    }
+
 
 }

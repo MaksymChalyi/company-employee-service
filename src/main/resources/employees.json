@@ -69,6 +69,20 @@
     }
   },
   {
+    "name": "Josephina",
+    "age": 24,
+    "position": 5,
+    "experienceYears": 5,
+    "interests": [
+      "Tennis",
+      "Scuba Diving"
+    ],
+    "company": {
+      "name": "Google",
+      "industry": "Transportation"
+    }
+  },
+  {
     "name": "Benjamin",
     "age": 54,
     "position": "Sales Manager",
@@ -86,7 +100,7 @@
   {
     "name": "Samuel",
     "age": 49,
-    "position": "Legal Counsel",
+    "position": "",
     "experienceYears": 2,
     "interests": [
       "Paintball",
