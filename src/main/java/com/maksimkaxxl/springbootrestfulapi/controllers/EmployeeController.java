@@ -2,17 +2,24 @@ package com.maksimkaxxl.springbootrestfulapi.controllers;
 
 import com.maksimkaxxl.springbootrestfulapi.dtos.CompanyDto;
 import com.maksimkaxxl.springbootrestfulapi.dtos.EmployeeDto;
+import com.maksimkaxxl.springbootrestfulapi.dtos.responce.EmployeeSummaryDto;
 import com.maksimkaxxl.springbootrestfulapi.dtos.responce.UploadedEmployeeResponse;
 import com.maksimkaxxl.springbootrestfulapi.entities.Employee;
 import com.maksimkaxxl.springbootrestfulapi.services.EmployeeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -52,8 +59,15 @@ public class EmployeeController {
     public ResponseEntity<UploadedEmployeeResponse> uploadEmployees(@RequestParam("file") MultipartFile file) {
         UploadedEmployeeResponse statisticsOfUploads = employeeService.uploadEmployeesFromFile(file);
         return new ResponseEntity<>(statisticsOfUploads, HttpStatus.CREATED);
-
     }
 
+    @PostMapping("/_list")
+    public ResponseEntity<?> getEmployeesByPage(@RequestBody(required = false) EmployeeSummaryDto employeeSummaryDto,
+                                                @RequestParam(defaultValue = "0") int page,
+                                                @RequestParam(defaultValue = "20") int size) {
+
+        Map<String, Object> response = employeeService.getEmployeesByPage(employeeSummaryDto, page, size);
+        return ResponseEntity.ok().body(response);
+    }
 
 }

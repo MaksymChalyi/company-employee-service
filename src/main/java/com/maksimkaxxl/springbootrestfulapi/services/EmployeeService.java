@@ -1,9 +1,14 @@
 package com.maksimkaxxl.springbootrestfulapi.services;
 
 import com.maksimkaxxl.springbootrestfulapi.dtos.EmployeeDto;
+import com.maksimkaxxl.springbootrestfulapi.dtos.responce.EmployeeSummaryDto;
 import com.maksimkaxxl.springbootrestfulapi.dtos.responce.UploadedEmployeeResponse;
 import com.maksimkaxxl.springbootrestfulapi.entities.Employee;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Map;
 
 public interface EmployeeService {
     Employee createEmployee(EmployeeDto employeeDto);
@@ -16,5 +21,7 @@ public interface EmployeeService {
 
     UploadedEmployeeResponse uploadEmployeesFromFile(MultipartFile file);
 
+    Page<EmployeeSummaryDto> getEmployeesFromList(EmployeeSummaryDto filmNameAndGenreDto, Pageable pageable);
 
+    Map<String, Object> getEmployeesByPage(EmployeeSummaryDto employeeSummaryDto, int page, int size);
 }

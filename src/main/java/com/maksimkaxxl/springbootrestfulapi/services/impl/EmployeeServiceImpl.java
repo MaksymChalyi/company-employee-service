@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.maksimkaxxl.springbootrestfulapi.dtos.EmployeeDto;
+import com.maksimkaxxl.springbootrestfulapi.dtos.responce.EmployeeSummaryDto;
 import com.maksimkaxxl.springbootrestfulapi.dtos.responce.UploadedEmployeeResponse;
 import com.maksimkaxxl.springbootrestfulapi.entities.Company;
 import com.maksimkaxxl.springbootrestfulapi.entities.Employee;
@@ -15,13 +16,16 @@ import com.maksimkaxxl.springbootrestfulapi.repository.CompanyRepository;
 import com.maksimkaxxl.springbootrestfulapi.repository.EmployeeRepository;
 import com.maksimkaxxl.springbootrestfulapi.services.EmployeeService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -51,7 +55,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public Employee findById(Long id) {
         return employeeRepository.findById(id)
-                .orElseThrow(() -> new EmployeeNotFoundException("Employee not found with id: " + id));
+                .orElseThrow(() -> new EmployeeNotFoundException("Employee not found with companyId: " + id));
     }
 
     @Override
@@ -101,6 +105,44 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         return new UploadedEmployeeResponse(successfulImports, failedImports, failedImportsDetails);
     }
+
+
+    @Override
+    public Page<EmployeeSummaryDto> getEmployeesFromList(EmployeeSummaryDto employeeSummaryDto, Pageable pageable) {
+        return Objects.nonNull(employeeSummaryDto) ?
+                employeeRepository.findAllByNameOrPositionOrCompany(
+                                employeeSummaryDto.name(),
+                                employeeSummaryDto.age(),
+                                employeeSummaryDto.position(),
+                                pageable)
+                        .orElseThrow(() -> new NoSuchElementException("hub1")) :
+                employeeRepository.findAllEmployeeNameOrPositionOrCompany(pageable)
+                        .orElseThrow(() -> new NoSuchElementException("hub2"));
+
+    }
+
+    @Override
+    public Map<String, Object> getEmployeesByPage(EmployeeSummaryDto employeeSummaryDto, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
+
+        Page<EmployeeSummaryDto> employeeSummaryDtos = Objects.nonNull(employeeSummaryDto) ?
+                employeeRepository.findAllByNameOrPositionOrCompany(
+                                employeeSummaryDto.name(),
+                                employeeSummaryDto.age(),
+                                employeeSummaryDto.position(),
+                                pageable)
+                        .orElseThrow(() -> new NoSuchElementException("hub1")) :
+                employeeRepository.findAllEmployeeNameOrPositionOrCompany(pageable)
+                        .orElseThrow(() -> new NoSuchElementException("hub2"));
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("list", employeeSummaryDtos.getContent());
+        response.put("totalPages", employeeSummaryDtos.getTotalPages());
+        return response;
+    }
+
+
+
 
 
     private Company getExistingCompany(String companyName) {
