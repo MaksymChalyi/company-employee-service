@@ -1,6 +1,5 @@
 package com.maksimkaxxl.springbootrestfulapi.repository;
 
-import com.maksimkaxxl.springbootrestfulapi.dtos.EmployeeDto;
 import com.maksimkaxxl.springbootrestfulapi.dtos.responce.EmployeeSummaryDto;
 import com.maksimkaxxl.springbootrestfulapi.entities.Employee;
 import org.springframework.data.domain.Page;
@@ -14,8 +13,6 @@ import java.util.Optional;
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     Page<Employee> findAll(Pageable pageable);
-
-    Optional<Employee> findByName(String name);
 
     Optional<Employee> findById(Long id);
 

@@ -1,26 +1,18 @@
 package com.maksimkaxxl.springbootrestfulapi.controllers;
 
-import com.maksimkaxxl.springbootrestfulapi.dtos.CompanyDto;
 import com.maksimkaxxl.springbootrestfulapi.dtos.EmployeeDto;
 import com.maksimkaxxl.springbootrestfulapi.dtos.responce.EmployeeSummaryDto;
 import com.maksimkaxxl.springbootrestfulapi.dtos.responce.UploadedEmployeeResponse;
-import com.maksimkaxxl.springbootrestfulapi.entities.Employee;
 import com.maksimkaxxl.springbootrestfulapi.services.EmployeeService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController

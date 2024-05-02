@@ -30,10 +30,7 @@ public class Employee {
     @ElementCollection
     private List<String> interests;
 
-
     @ManyToOne
     @JoinColumn(name = "company_id")
     private Company company;
-
-
 }

@@ -6,6 +6,7 @@ import com.maksimkaxxl.springbootrestfulapi.exceptions.CompanyNotFoundException;
 import com.maksimkaxxl.springbootrestfulapi.exceptions.DuplicateCompanyNameException;
 import com.maksimkaxxl.springbootrestfulapi.repository.CompanyRepository;
 import com.maksimkaxxl.springbootrestfulapi.services.CompanyService;
+import com.maksimkaxxl.springbootrestfulapi.utils.Constants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +22,7 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public Company createCompany(CompanyDto companyDto) {
         if (companyRepository.findByName(companyDto.name()).isPresent()) {
-            throw new DuplicateCompanyNameException("Duplicate company name found: " + companyDto.name());
+            throw new DuplicateCompanyNameException(Constants.ErrorMessages.DUPLICATE_COMPANY_NAME + companyDto.name());
         }
         Company company = new Company();
         company.setName(companyDto.name());
@@ -40,7 +41,7 @@ public class CompanyServiceImpl implements CompanyService {
         if (companyOptional.isPresent()) {
             companyRepository.deleteById(id);
         } else {
-            throw new CompanyNotFoundException("Company with ID " + id + " not found");
+            throw new CompanyNotFoundException(Constants.ErrorMessages.COMPANY_NOT_FOUND_ID + id + Constants.ErrorMessages.NOT_FOUND);
         }
     }
 
@@ -48,11 +49,11 @@ public class CompanyServiceImpl implements CompanyService {
     public Company updateCompany(Long id, CompanyDto companyDto) {
 
         Company existingCompany = companyRepository.findById(id)
-                .orElseThrow(() -> new CompanyNotFoundException("Company with ID " + id + " not found"));
+                .orElseThrow(() -> new CompanyNotFoundException(Constants.ErrorMessages.COMPANY_NOT_FOUND_ID + id + Constants.ErrorMessages.NOT_FOUND));
 
         Optional<Company> companyWithSameName = companyRepository.findByName(companyDto.name());
         if (companyWithSameName.isPresent() && !companyWithSameName.get().getId().equals(id)) {
-            throw new DuplicateCompanyNameException("Company with name " + companyDto.name() + " already exists");
+            throw new DuplicateCompanyNameException(Constants.ErrorMessages.COMPANY_ALREADY_EXISTS);
         }
         existingCompany.setName(companyDto.name());
         existingCompany.setIndustry(companyDto.industry());

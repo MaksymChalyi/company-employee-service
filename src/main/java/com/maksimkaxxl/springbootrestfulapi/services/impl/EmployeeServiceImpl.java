@@ -17,19 +17,16 @@ import com.maksimkaxxl.springbootrestfulapi.repository.EmployeeRepository;
 import com.maksimkaxxl.springbootrestfulapi.services.EmployeeService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.*;
 
 @Service
@@ -120,10 +117,9 @@ public class EmployeeServiceImpl implements EmployeeService {
                                 employeeSummaryDto.age(),
                                 employeeSummaryDto.position(),
                                 pageable)
-                        .orElseThrow(() -> new NoSuchElementException("hub1")) :
+                        .orElseThrow(() -> new NoSuchElementException("No such employee by filter.")) :
                 employeeRepository.findAllEmployeeNameOrPositionOrCompany(pageable)
-                        .orElseThrow(() -> new NoSuchElementException("hub2"));
-
+                        .orElseThrow(() -> new NoSuchElementException("No such employee."));
     }
 
     @Override
@@ -147,7 +143,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public void generateEmployeeReport(HttpServletResponse response, EmployeeSummaryDto employeeSummaryDto)  {
+    public void generateEmployeeReport(HttpServletResponse response, EmployeeSummaryDto employeeSummaryDto) {
         response.setContentType("text/csv");
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=employees-report.csv");
 
@@ -178,25 +174,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         return employeesPage.getContent();
     }
-
-    private void createEmployeeCsv(EmployeeSummaryDto employeeSummaryDto, OutputStream outputStream) throws IOException {
-        int pageNumber = 0;
-        int pageSize = 20;
-        Page<EmployeeSummaryDto> employeesPage;
-
-        do {
-            Pageable pageable = PageRequest.of(pageNumber, pageSize);
-            employeesPage = getEmployeesFromList(employeeSummaryDto, pageable);
-            pageNumber++;
-
-            for (EmployeeSummaryDto employee : employeesPage) {
-                String csvLine = String.join(",", employee.name(), String.valueOf(employee.age()), employee.position()) + "\n";
-                outputStream.write(csvLine.getBytes());
-            }
-        } while (employeesPage.hasNext());
-    }
-
-
 
     private Company getExistingCompany(String companyName) {
         return companyRepository.findByName(companyName)
