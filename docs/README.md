@@ -7,7 +7,7 @@ This project implements a RESTful API using Spring Boot, allowing for the manage
 1. **Clone the Repository**: Clone this repository to your local machine.
 2. **Set Up the Database**: Configure the database settings in `application.properties`.
 3. **Build and Run**: Build and run the application using Maven or your preferred IDE.
-4. **Access the API**: Use tools like Postman or cURL to interact with the API endpoints.
+4. **Access the API**: Use tools like Postman to interact with the API endpoints.
 
 ## Features
 
@@ -83,9 +83,6 @@ Integration tests cover the interaction between different components of the appl
 - **CompanyControllerTest.java**: Integration tests for company-related endpoints.
 
 These integration tests ensure that the API endpoints behave as expected and cover the underlying logic of the application.
-
-Certainly, here's the addition to the README.md file in English:
-
 
 ## Data Import
 
