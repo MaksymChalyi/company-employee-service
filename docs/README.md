@@ -13,7 +13,7 @@ This project implements a RESTful API using Spring Boot, allowing for the manage
 
 - **Company Management**: Create, update, delete, and retrieve companies.
 - **Employee Management**: Create, update, delete, and retrieve employees.
-- **File Upload**: Upload employee data from a file CSV.
+- **File Upload**: Upload employee data from a file JSON.
 - **Report Generation**: Generate reports in CSV format based on specified criteria.
 
 ## Technologies Used
