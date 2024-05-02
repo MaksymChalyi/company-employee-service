@@ -57,7 +57,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public Employee findById(Long id) {
         return employeeRepository.findById(id)
-                .orElseThrow(() -> new EmployeeNotFoundException("Employee not found with companyId: " + id));
+                .orElseThrow(() -> new EmployeeNotFoundException("Employee not found with id: " + id));
     }
 
     @Override
@@ -199,5 +199,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setCompany(company);
         return employee;
     }
+
+
+
 
 }
