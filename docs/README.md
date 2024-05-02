@@ -84,6 +84,18 @@ Integration tests cover the interaction between different components of the appl
 
 These integration tests ensure that the API endpoints behave as expected and cover the underlying logic of the application.
 
+Certainly, here's the addition to the README.md file in English:
+
+
+## Data Import
+
+To facilitate data import, a JSON file named `employees.json` is provided within the repository. This file is located at the following path:
+
+```
+src/main/resources/employees.json
+```
+
+You can use this file to import employee data into the application.
 
 
 ---
