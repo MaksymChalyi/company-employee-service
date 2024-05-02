@@ -6,12 +6,14 @@ import com.maksimkaxxl.springbootrestfulapi.dtos.responce.EmployeeSummaryDto;
 import com.maksimkaxxl.springbootrestfulapi.dtos.responce.UploadedEmployeeResponse;
 import com.maksimkaxxl.springbootrestfulapi.entities.Employee;
 import com.maksimkaxxl.springbootrestfulapi.services.EmployeeService;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -68,6 +70,12 @@ public class EmployeeController {
 
         Map<String, Object> response = employeeService.getEmployeesByPage(employeeSummaryDto, page, size);
         return ResponseEntity.ok().body(response);
+    }
+
+    @PostMapping(value = "/_report", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    public ResponseEntity<?> generateEmployeeReport(HttpServletResponse response, @RequestBody EmployeeSummaryDto employeeSummaryDto) {
+        employeeService.generateEmployeeReport(response, employeeSummaryDto);
+        return ResponseEntity.ok().build();
     }
 
 }

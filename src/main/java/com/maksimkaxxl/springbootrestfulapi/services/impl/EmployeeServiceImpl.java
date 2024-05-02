@@ -15,16 +15,21 @@ import com.maksimkaxxl.springbootrestfulapi.exceptions.EmployeeNotFoundException
 import com.maksimkaxxl.springbootrestfulapi.repository.CompanyRepository;
 import com.maksimkaxxl.springbootrestfulapi.repository.EmployeeRepository;
 import com.maksimkaxxl.springbootrestfulapi.services.EmployeeService;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.*;
 
 @Service
@@ -141,7 +146,55 @@ public class EmployeeServiceImpl implements EmployeeService {
         return response;
     }
 
+    @Override
+    public void generateEmployeeReport(HttpServletResponse response, EmployeeSummaryDto employeeSummaryDto)  {
+        response.setContentType("text/csv");
+        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=employees-report.csv");
 
+        try (var writer = response.getWriter()) {
+            // Записуємо заголовок CSV файлу
+            writer.println("Name,Age,Position");
+
+            // Отримуємо всіх працівників за критеріями фільтрації
+            List<EmployeeSummaryDto> employees = getFilteredEmployees(employeeSummaryDto);
+
+            // Записуємо дані в CSV файл
+            for (EmployeeSummaryDto employee : employees) {
+                String csvLine = String.join(",", employee.name(), String.valueOf(employee.age()), employee.position());
+                writer.println(csvLine);
+            }
+        } catch (IOException e) {
+        }
+    }
+
+    private List<EmployeeSummaryDto> getFilteredEmployees(EmployeeSummaryDto employeeSummaryDto) {
+        Pageable pageable = PageRequest.of(0, Integer.MAX_VALUE, Sort.by("id").descending());
+        Page<EmployeeSummaryDto> employeesPage = employeeRepository.findAllByNameOrPositionOrCompany(
+                employeeSummaryDto.name(),
+                employeeSummaryDto.age(),
+                employeeSummaryDto.position(),
+                pageable
+        ).orElseThrow(() -> new NoSuchElementException("Failed to get employees list"));
+
+        return employeesPage.getContent();
+    }
+
+    private void createEmployeeCsv(EmployeeSummaryDto employeeSummaryDto, OutputStream outputStream) throws IOException {
+        int pageNumber = 0;
+        int pageSize = 20;
+        Page<EmployeeSummaryDto> employeesPage;
+
+        do {
+            Pageable pageable = PageRequest.of(pageNumber, pageSize);
+            employeesPage = getEmployeesFromList(employeeSummaryDto, pageable);
+            pageNumber++;
+
+            for (EmployeeSummaryDto employee : employeesPage) {
+                String csvLine = String.join(",", employee.name(), String.valueOf(employee.age()), employee.position()) + "\n";
+                outputStream.write(csvLine.getBytes());
+            }
+        } while (employeesPage.hasNext());
+    }
 
 
 

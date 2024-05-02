@@ -4,6 +4,7 @@ import com.maksimkaxxl.springbootrestfulapi.dtos.EmployeeDto;
 import com.maksimkaxxl.springbootrestfulapi.dtos.responce.EmployeeSummaryDto;
 import com.maksimkaxxl.springbootrestfulapi.dtos.responce.UploadedEmployeeResponse;
 import com.maksimkaxxl.springbootrestfulapi.entities.Employee;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,4 +25,6 @@ public interface EmployeeService {
     Page<EmployeeSummaryDto> getEmployeesFromList(EmployeeSummaryDto filmNameAndGenreDto, Pageable pageable);
 
     Map<String, Object> getEmployeesByPage(EmployeeSummaryDto employeeSummaryDto, int page, int size);
+
+    void generateEmployeeReport(HttpServletResponse response, EmployeeSummaryDto employeeSummaryDto);
 }
