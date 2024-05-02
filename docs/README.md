@@ -73,6 +73,19 @@ This project implements a RESTful API using Spring Boot, allowing for the manage
 
   ![img_9.png](img/img_9.png)
 
+
+
+### Integration Tests
+
+Integration tests cover the interaction between different components of the application to ensure they function correctly together. These tests are located in the following files:
+
+- **EmployeeControllerTest.java**: Integration tests for employee-related endpoints.
+- **CompanyControllerTest.java**: Integration tests for company-related endpoints.
+
+These integration tests ensure that the API endpoints behave as expected and cover the underlying logic of the application.
+
+
+
 ---
 
 ### License
