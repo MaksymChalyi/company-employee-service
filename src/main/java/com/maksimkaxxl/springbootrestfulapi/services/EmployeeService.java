@@ -27,4 +27,6 @@ public interface EmployeeService {
     Map<String, Object> getEmployeesByPage(EmployeeSummaryDto employeeSummaryDto, int page, int size);
 
     void generateEmployeeReport(HttpServletResponse response, EmployeeSummaryDto employeeSummaryDto);
+
+    Page<Employee> findAllEmployees(int page, int size);
 }

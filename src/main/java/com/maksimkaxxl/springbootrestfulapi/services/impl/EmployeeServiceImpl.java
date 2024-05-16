@@ -163,6 +163,12 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
     }
 
+    @Override
+    public Page<Employee> findAllEmployees(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return employeeRepository.findAll(pageable);
+    }
+
     private List<EmployeeSummaryDto> getFilteredEmployees(EmployeeSummaryDto employeeSummaryDto) {
         Pageable pageable = PageRequest.of(0, Integer.MAX_VALUE, Sort.by("id").descending());
         Page<EmployeeSummaryDto> employeesPage = employeeRepository.findAllByNameOrPositionOrCompany(
