@@ -25,14 +25,14 @@ public class EmployeeController {
     private final EmployeeService employeeService;
 
     @PostMapping
-    @CrossOrigin(origins = "http://localhost:3050")
+    @CrossOrigin(origins = "*")
     public ResponseEntity<?> createEmployee(@Valid @RequestBody EmployeeDto employeeDto) {
         var createdEmployee = employeeService.createEmployee(employeeDto);
         return new ResponseEntity<>(createdEmployee, HttpStatus.CREATED);
     }
 
     @GetMapping("/all")
-    @CrossOrigin(origins = "http://localhost:3050")
+    @CrossOrigin(origins = "*")
     public ResponseEntity<Page<Employee>>findEmployees(@RequestParam(defaultValue = "0") int page,
                                                        @RequestParam(defaultValue = "5") int size) {
         var employees = employeeService.findAllEmployees(page, size);
@@ -40,7 +40,7 @@ public class EmployeeController {
     }
 
     @GetMapping("/{id}")
-    @CrossOrigin(origins = "http://localhost:3050")
+    @CrossOrigin(origins = "*")
     public ResponseEntity<?> findEmployeeById(@PathVariable Long id) {
         var employee = employeeService.findById(id);
         return new ResponseEntity<>(employee, HttpStatus.OK);
@@ -55,7 +55,7 @@ public class EmployeeController {
     }
 
     @DeleteMapping("/{id}")
-    @CrossOrigin(origins = "http://localhost:3050")
+    @CrossOrigin(origins = "*")
     public ResponseEntity<Void> deleteEmployeeById(@PathVariable Long id) {
         employeeService.deleteEmployee(id);
         return ResponseEntity.noContent().build();
@@ -63,14 +63,14 @@ public class EmployeeController {
     }
 
     @PostMapping("/upload")
-    @CrossOrigin(origins = "http://localhost:3050")
+    @CrossOrigin(origins = "*")
     public ResponseEntity<UploadedEmployeeResponse> uploadEmployees(@RequestParam("file") MultipartFile file) {
         UploadedEmployeeResponse statisticsOfUploads = employeeService.uploadEmployeesFromFile(file);
         return new ResponseEntity<>(statisticsOfUploads, HttpStatus.CREATED);
     }
 
     @PostMapping("/_list")
-    @CrossOrigin(origins = "http://localhost:3050")
+    @CrossOrigin(origins = "*")
     public ResponseEntity<?> getEmployeesByPage(@RequestBody(required = false) EmployeeSummaryDto employeeSummaryDto,
                                                 @RequestParam(defaultValue = "0") int page,
                                                 @RequestParam(defaultValue = "5") int size) {
@@ -79,11 +79,13 @@ public class EmployeeController {
         return ResponseEntity.ok().body(response);
     }
 
-    @CrossOrigin(origins = "http://localhost:3050")
+    @CrossOrigin(origins = "*")
     @PostMapping(value = "/_report", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public ResponseEntity<?> generateEmployeeReport(HttpServletResponse response, @RequestBody EmployeeSummaryDto employeeSummaryDto) {
         employeeService.generateEmployeeReport(response, employeeSummaryDto);
         return ResponseEntity.ok().build();
     }
+
+
 
 }
