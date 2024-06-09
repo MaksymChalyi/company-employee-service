@@ -10,7 +10,7 @@ import org.springframework.kafka.core.KafkaAdmin;
 import java.util.Map;
 
 @Configuration
-public class KafkaProducerConfig {
+public class KafkaTopicConfig {
 
     @Value(value = "${spring.kafka.bootstrap-servers}")
     private String bootstrapAddress;

@@ -14,11 +14,11 @@ public class KafkaProducerServiceImpl implements KafkaProducerService {
     @Value("${kafka.topic.mailSender}")
     private String mailSenderTopic;
 
-    private final KafkaOperations<String, EmployeeDto> kafkaOperations;
+    private final KafkaOperations<String, String> kafkaOperations;
 
     @Override
-    public void sendMessage(EmployeeDto employeeDto) {
-        kafkaOperations.send(mailSenderTopic, employeeDto);
+    public void sendMessage(String json) {
+        kafkaOperations.send(mailSenderTopic, json);
     }
 
 }

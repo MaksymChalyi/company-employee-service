@@ -53,7 +53,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     public Employee createEmployee(EmployeeDto employeeDto) {
         Company existingCompany = getExistingCompany(employeeDto.company().name());
         Employee employee = mapEmployeeDtoToEntity(employeeDto, existingCompany);
-        kafkaProducerService.sendMessage(employeeDto);
+        kafkaProducerService.sendMessage(employeeDto.toString());
+        System.out.println("Send to mailSender microservice: "+ employeeDto);
         return employeeRepository.save(employee);
     }
 
