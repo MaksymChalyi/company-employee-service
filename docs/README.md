@@ -8,13 +8,14 @@ This project implements a RESTful API using Spring Boot, allowing for the manage
 2. **Set Up the Database**: Configure the database settings in `application.properties`.
 3. **Build and Run**: Build and run the application using Maven or your preferred IDE.
 4. **Access the API**: Use tools like Postman to interact with the API endpoints.
-
+5. **Before running the application, make sure Kafka and Zookeeper are started:**
 ## Features
 
 - **Company Management**: Create, update, delete, and retrieve companies.
 - **Employee Management**: Create, update, delete, and retrieve employees.
 - **File Upload**: Upload employee data from a file JSON.
 - **Report Generation**: Generate reports in CSV format based on specified criteria.
+- **Connect with Email Sender microservice**: To create a new employee, send a POST request to /api/employees with the employee details in the request body. The application will save the employee details to the database and send a message to the Kafka topic mailSender. The Kafka consumer service will process the messages and send emails accordingly.
 
 ## Technologies Used
 
@@ -23,6 +24,13 @@ This project implements a RESTful API using Spring Boot, allowing for the manage
 - **Spring Web**: Provides basic web support, including RESTful APIs.
 - **Jackson**: JSON (de)serialization library for Java.
 - **Lombok**: Library for reducing boilerplate code in Java classes.
+
+
+## Configuration
+- **Kafka Topics**
+  mailSender: Topic for sending employee details to be processed for sending emails.
+- **Kafka Producer**
+  A Kafka producer is integrated into the application to send messages to the mailSender Kafka topic whenever a new employee is created.
 
 ## API Endpoints
 ### Company Endpoints
@@ -72,6 +80,8 @@ This project implements a RESTful API using Spring Boot, allowing for the manage
 - **Generate Employee Report at CSV file**: `POST /api/employee/_report`
 
   ![img_9.png](img/img_9.png)
+
+
 
 
 

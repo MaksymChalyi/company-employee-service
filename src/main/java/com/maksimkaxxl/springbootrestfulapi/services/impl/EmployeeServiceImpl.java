@@ -15,6 +15,7 @@ import com.maksimkaxxl.springbootrestfulapi.exceptions.EmployeeNotFoundException
 import com.maksimkaxxl.springbootrestfulapi.repository.CompanyRepository;
 import com.maksimkaxxl.springbootrestfulapi.repository.EmployeeRepository;
 import com.maksimkaxxl.springbootrestfulapi.services.EmployeeService;
+import com.maksimkaxxl.springbootrestfulapi.services.KafkaProducerService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -36,6 +37,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final CompanyRepository companyRepository;
     private final ObjectMapper objectMapper;
+    private final KafkaProducerService kafkaProducerService;
 
     static {
         ObjectMapper mapper = new ObjectMapper();
@@ -51,6 +53,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     public Employee createEmployee(EmployeeDto employeeDto) {
         Company existingCompany = getExistingCompany(employeeDto.company().name());
         Employee employee = mapEmployeeDtoToEntity(employeeDto, existingCompany);
+        kafkaProducerService.sendMessage(employeeDto);
         return employeeRepository.save(employee);
     }
 
@@ -205,8 +208,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setCompany(company);
         return employee;
     }
-
-
 
 
 }
