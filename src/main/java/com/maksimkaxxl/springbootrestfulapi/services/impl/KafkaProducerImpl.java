@@ -2,18 +2,18 @@ package com.maksimkaxxl.springbootrestfulapi.services.impl;
 
 import com.maksimkaxxl.springbootrestfulapi.services.KafkaProducer;
 import lombok.RequiredArgsConstructor;
-import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.core.KafkaOperations;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class KafkaProducerImpl implements KafkaProducer {
 
-    public final KafkaTemplate<String, String> kafkaTemplate;
+    private final KafkaOperations<String, String> kafkaOperations;
 
     @Override
     public void sendMessage(String message){
-        kafkaTemplate.send("mailSender",message);
+        kafkaOperations.send("mailSender",message);
     }
 
 }
