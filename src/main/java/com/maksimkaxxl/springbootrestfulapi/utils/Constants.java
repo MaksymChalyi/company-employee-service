@@ -7,4 +7,12 @@ public class Constants {
         public static final String NOT_FOUND = " not found";
         public static final String COMPANY_ALREADY_EXISTS = "Company with this name already exists";
     }
+
+    public static final class SuccessMessages {
+        public static final String EMPLOYEE_ADDED = "New employee successfully added!";
+    }
+
+    public static final class FailureMessages {
+        public static final String EMPLOYEE_NOT_ADDED = "New employee not added? We have a problem!";
+    }
 }

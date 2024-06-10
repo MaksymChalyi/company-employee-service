@@ -2,6 +2,7 @@ package com.maksimkaxxl.springbootrestfulapi.services.impl;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,6 +17,7 @@ import com.maksimkaxxl.springbootrestfulapi.repository.CompanyRepository;
 import com.maksimkaxxl.springbootrestfulapi.repository.EmployeeRepository;
 import com.maksimkaxxl.springbootrestfulapi.services.EmployeeService;
 import com.maksimkaxxl.springbootrestfulapi.services.KafkaProducerService;
+import io.github.cdimascio.dotenv.Dotenv;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -30,14 +32,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
+import static com.maksimkaxxl.springbootrestfulapi.utils.Constants.FailureMessages.EMPLOYEE_NOT_ADDED;
+import static com.maksimkaxxl.springbootrestfulapi.utils.Constants.SuccessMessages.EMPLOYEE_ADDED;
+
 @Service
 @RequiredArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
+
 
     private final EmployeeRepository employeeRepository;
     private final CompanyRepository companyRepository;
     private final ObjectMapper objectMapper;
     private final KafkaProducerService kafkaProducerService;
+    private final Dotenv dotenv;
 
     static {
         ObjectMapper mapper = new ObjectMapper();
@@ -53,9 +60,14 @@ public class EmployeeServiceImpl implements EmployeeService {
     public Employee createEmployee(EmployeeDto employeeDto) {
         Company existingCompany = getExistingCompany(employeeDto.company().name());
         Employee employee = mapEmployeeDtoToEntity(employeeDto, existingCompany);
-        kafkaProducerService.sendMessage(employeeDto.toString());
-        System.out.println("Send to mailSender microservice: "+ employeeDto);
-        return employeeRepository.save(employee);
+        Employee createdEmployee = employeeRepository.save(employee);
+        if (findById(createdEmployee.getId()) != null) {
+            sendEmailNotification(createdEmployee, EMPLOYEE_ADDED, dotenv.get("ADMIN_EMAIL"));
+        } else {
+            sendEmailNotification(createdEmployee, EMPLOYEE_NOT_ADDED, dotenv.get("ADMIN_EMAIL"));
+        }
+
+        return createdEmployee;
     }
 
     @Override
@@ -164,8 +176,10 @@ public class EmployeeServiceImpl implements EmployeeService {
                 writer.println(csvLine);
             }
         } catch (IOException e) {
+            e.printStackTrace();
         }
     }
+
 
     @Override
     public Page<Employee> findAllEmployees(int page, int size) {
@@ -210,5 +224,17 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employee;
     }
 
+    private void sendEmailNotification(Employee employee, String subject, String recipientEmail) {
+        try {
+            Map<String, String> jsonMessage = new HashMap<>();
+            jsonMessage.put("subject", subject);
+            jsonMessage.put("content", employee.toString());
+            jsonMessage.put("recipientEmail", recipientEmail);
 
+
+            kafkaProducerService.sendMessage(objectMapper.writeValueAsString(jsonMessage));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+    }
 }
