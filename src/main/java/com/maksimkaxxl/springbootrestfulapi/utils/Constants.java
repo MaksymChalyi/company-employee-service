@@ -13,6 +13,6 @@ public class Constants {
     }
 
     public static final class FailureMessages {
-        public static final String EMPLOYEE_NOT_ADDED = "New employee not added? We have a problem!";
+        public static final String EMPLOYEE_NOT_ADDED = "New employee not added, we have a problem!";
     }
 }
