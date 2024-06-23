@@ -1,4 +1,4 @@
-version: '3'
+version: "3.9"
 
 services:
   postgres:
@@ -18,6 +18,12 @@ services:
     depends_on:
       - postgres
     environment:
-      - 'SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/employee_management'
-      - 'SPRING_DATASOURCE_USERNAME=postgres'
-      - 'SPRING_DATASOURCE_PASSWORD=1234'
+      - 'DB_URL=jdbc:postgresql://postgres:5432/employee_management'
+      - 'DB_USERNAME=postgres'
+      - 'DB_PASSWORD=1234'
+      - 'KAFKA_ADDRESS=kafka:9092'
+networks:
+  default:
+    name: my-network
+    driver: bridge
+    external: true

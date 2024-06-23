@@ -1,6 +1,5 @@
 package com.maksimkaxxl.springbootrestfulapi.services.impl;
 
-import com.maksimkaxxl.springbootrestfulapi.dtos.EmployeeDto;
 import com.maksimkaxxl.springbootrestfulapi.services.KafkaProducerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
